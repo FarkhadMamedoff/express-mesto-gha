@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const status = require('../utils/status').default;
+const status = require('../utils/status');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
