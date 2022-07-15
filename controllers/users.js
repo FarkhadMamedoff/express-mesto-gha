@@ -10,12 +10,14 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
-      res.status(status.OK).send({ user });
+      if (user) {
+        res.status(status.OK).send({ user });
+      } else {
+        res.status(status.NOTFOUND).send({ message: 'Пользователь не найден' });
+      }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(status.NOTFOUND).send({ message: 'Пользователь не найден' });
-      } else if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(status.ERROR).send({ message: 'Введены некорректные данные' });
       } else {
         res.status(status.INTERNALERROR).send({ message: 'Внутренняя ошибка сервера' });
