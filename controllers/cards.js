@@ -10,11 +10,15 @@ module.exports.getCards = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
-      res.status(status.OK).send({ card });
+      if (card) {
+        res.status(status.OK).send({ card });
+      } else {
+        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(status.ERROR).send({ message: 'Введены некорректные данные' });
       } else {
         res.status(status.INTERNALERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
@@ -37,13 +41,17 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.likeCard = (req, res) => {
-  Card.findOneAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .then((card) => {
-      res.status(status.OK).send({ card });
+      if (card) {
+        res.status(status.OK).send({ card });
+      } else {
+        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(status.ERROR).send({ message: 'Введены некорректные данные' });
       } else {
         res.status(status.INTERNALERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
@@ -51,13 +59,17 @@ module.exports.likeCard = (req, res) => {
 };
 
 module.exports.dislikeCard = (req, res) => {
-  Card.findOneAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .then((card) => {
-      res.status(status.OK).send({ card });
+      if (card) {
+        res.status(status.OK).send({ card });
+      } else {
+        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(status.NOTFOUND).send({ message: 'Карточка не найдена' });
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        res.status(status.ERROR).send({ message: 'Введены некорректные данные' });
       } else {
         res.status(status.INTERNALERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
