@@ -15,6 +15,8 @@ module.exports.getUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(status.NOTFOUND).send({ message: 'Пользователь не найден' });
+      } else if (err.name === 'ValidationError') {
+        res.status(status.ERROR).send({ message: 'Введены некорректные данные' });
       } else {
         res.status(status.INTERNALERROR).send({ message: 'Внутренняя ошибка сервера' });
       }
