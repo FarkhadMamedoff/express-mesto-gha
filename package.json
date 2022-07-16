@@ -14,7 +14,7 @@
     "mongoose": "^6.4.4"
   },
   "scripts": {
-    "lint": "npx eslint",
+    "lint": "npx eslint .",
     "start": "node app.js",
     "dev": "nodemon app.js"
   }
