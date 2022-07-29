@@ -11,15 +11,17 @@ module.exports.getCards = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (card) {
-        res.status(status.OK).send({ card });
-      } else {
+  Card.findById(req.params.cardId)
+    .then((data) => {
+      if (!data) {
         throw new NotFoundError('Карточка не найдена');
-      }
-      if (!card.owner.equals(req.user._id)) {
+      } else if (!data.owner.equals(req.user._id)) {
         throw new ForbiddenError('Доступ к карточке запрещен');
+      } else {
+        Card.findByIdAndRemove(req.params.cardId)
+          .then((card) => {
+            res.status(status.OK).send({ card });
+          });
       }
     })
     .catch((err) => {
