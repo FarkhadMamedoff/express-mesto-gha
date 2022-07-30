@@ -22,7 +22,7 @@ module.exports.getUser = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -65,9 +65,7 @@ module.exports.updateUserInfo = (req, res, next) => {
       res.status(status.OK).send({ user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new NotFoundError('Пользователь не найден'));
-      } else if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -82,9 +80,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
       res.status(status.OK).send({ user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new NotFoundError('Пользователь не найден'));
-      } else if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -107,9 +103,7 @@ module.exports.login = (req, res, next) => {
 module.exports.getSignedInUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      if (user) {
-        res.status(status.OK).send({ user });
-      }
+      res.status(status.OK).send({ user });
     })
     .catch(next);
 };

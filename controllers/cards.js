@@ -25,7 +25,7 @@ module.exports.deleteCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -58,7 +58,7 @@ module.exports.likeCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -76,7 +76,7 @@ module.exports.dislikeCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
